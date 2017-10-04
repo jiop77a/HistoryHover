@@ -14,13 +14,14 @@
     "default_popup": "popup.html"
   },
 
-  "background": {
-    "scripts": ["eventPage.js"],
-    "persistent": false
-  },
 
-  "permissions": [
-    "contextMenus"
-  ]
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["build.js"],
+      "run_at": "document_start"
+    }
+  ],
+
 
 }
