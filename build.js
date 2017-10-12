@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", () => {
+// document.addEventListener("DOMContentLoaded", );
+let duderino = () => {
   let timeouts = [];
   const getEtym = async word => {
     const proxyurl = "https://yes-proxy.herokuapp.com/";
@@ -157,4 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   makeBottomDiv();
   makeSpans();
-});
+  
+};
+
+duderino();

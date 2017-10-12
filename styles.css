@@ -92,3 +92,19 @@ body {
   color: #800020;
   font-size: 20px;
 }
+
+/*nytimes hack*/
+
+.freeform {
+  display: none;
+}
+
+/*developer.chrome.com hack*/
+
+.inline-site-toc li.toplevel.show span:first-of-type {
+  display: none;
+}
+
+.inline-site-toc li.toplevel.show span {
+  display: block;
+}
