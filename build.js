@@ -5,14 +5,14 @@ let duderino = () => {
     const proxyurl = "https://yes-proxy.herokuapp.com/";
     // "http://localhost:8080/"
     //  "https://cors-anywhere.herokuapp.com/";
-    let url = `http://www.etymonline.com/index.php?term=${word}`;
+    let url = `http://www.etymonline.com/word${word}`;
 
     const data = await fetch(proxyurl + url);
     const words = await data.text();
     let parser = new DOMParser();
     let htmlDoc = parser.parseFromString(words, "text/html");
     let html = htmlDoc.getElementById("dictionary");
-    let links = html.querySelectorAll("a")
+    let links = html.querySelectorAll("a");
     links.forEach(el => {
       let oldHref = el.href;
       let index = /index/.exec(oldHref).index;
@@ -158,7 +158,7 @@ let duderino = () => {
 
   makeBottomDiv();
   makeSpans();
-  
+
 };
 
 duderino();
