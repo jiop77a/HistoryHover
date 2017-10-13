@@ -2,6 +2,10 @@ body {
   margin: 10px;
 }
 
+blockquote {
+  margin: 10px;
+}
+
 .alexClass:hover {
   background-color: yellow;
 }
@@ -10,15 +14,23 @@ body {
   display: none;
 }
 
+.popDup div:last-child {
+  margin-bottom: auto;
+}
+
+.popDup div {
+  margin-bottom: 10px;
+}
+
 .popDup {
-  background-color: lightgrey;
+  background-color: #fffbec;
   border-radius: 4px;
   padding: 5px;
   font-size: 12px;
   color: darkslategrey;
-  white-space: pre-wrap;
   box-sizing: border-box;
   width: 100%;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif
 }
 
 #bottomDiv {
@@ -40,6 +52,15 @@ body {
   display: inline-block;
 }
 
+.title {
+  display: block;
+  font-size: 24px;
+  margin: 0;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #800020;
+}
+
 .loader {
   max-height: 50vh;
   bottom: 0;
@@ -57,40 +78,9 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-#dictionary {
-  background-color: #fffbec;
-  padding-top: .5em;
-  border: 1px solid #000;
-  margin-bottom: 1em;
-  padding: .5em
-}
-
-#dictionary p {
-  padding: 0;
-  margin: 0
-}
-
-#dictionary dd, #dictionary dt {
-  background-color: #fffbec;
-  margin-left: 0;
-  padding: 0 .5em;
-}
-
-#dictionary dt {
-  padding-top: .5em;
-}
-
-#dictionary dd {
-  padding-bottom: .5em
-}
 
 .crossreference, .foreign {
   font-style: italic
-}
-
-#dictionary dt a {
-  color: #800020;
-  font-size: 20px;
 }
 
 /*nytimes hack*/
