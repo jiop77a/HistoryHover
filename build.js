@@ -1,10 +1,23 @@
 let duderino = () => {
   let timeouts = [];
+
+  const fixLinks = (object) => {
+    let links = object.querySelectorAll(".crossreference");
+    for (let i = 0; i < links.length; i++) {
+      let word = links[i].innerHTML;
+      links[i].innerHTML = `
+        <a href="http://www.etymonline.com/word/${word}">${word}</a>
+        `;
+    }
+    return object
+  }
+
   const assembleResponse = (title, definition) => {
     title.className = "title";
     let final = document.createElement('div');
+    let body = fixLinks(definition);
     final.appendChild(title);
-    final.appendChild(definition);
+    final.appendChild(body);
     return final
   }
 
