@@ -102,7 +102,7 @@ let duderino = () => {
     for (var i = 0 ; i < timeouts.length; i++) {
       clearTimeout(timeouts[i]);
     }
-    // closeTimer();
+    closeTimer();
   };
 
   const makeSpans = () => {
@@ -179,9 +179,9 @@ let duderino = () => {
       timeouts = [];
     });
 
-    // bottomDiv.addEventListener("mouseleave", (e) => {
-    //   closeTimer();
-    // });
+    bottomDiv.addEventListener("mouseleave", (e) => {
+      closeTimer();
+    });
 
     document.body.appendChild(bottomDiv);
   };
@@ -191,4 +191,4 @@ let duderino = () => {
 
 };
 
-document.addEventListener("DOMContentLoaded", duderino);
+duderino();
