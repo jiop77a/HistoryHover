@@ -12,21 +12,14 @@ let duderino = () => {
     let parser = new DOMParser();
     let htmlDoc = parser.parseFromString(text, "text/html");
     let divs = htmlDoc.querySelectorAll(".word--C9UPa");
-    if (divs.length === 1) {
-      let div = divs[0].firstChild;
+    let list = document.createElement('div');
+    for (let i = 0; i < divs.length; i++) {
+      let div = divs[i].firstChild;
       let title = div.firstChild;
       let definition = div.lastChild.lastChild;
-      return assembleResponse(title, definition);
-    } else {
-      let list = document.createElement('div');
-      for (let i = 0; i < divs.length; i++) {
-        let div = divs[i].firstChild;
-        let title = div.firstChild;
-        let definition = div.lastChild.lastChild;
-        list.appendChild(assembleResponse(title, definition));
-      }
-      return list;
+      list.appendChild(assembleResponse(title, definition));
     }
+    return list;
   }
 
   const failResponse = () => {
