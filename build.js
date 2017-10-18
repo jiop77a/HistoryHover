@@ -68,9 +68,23 @@ let duderino = () => {
   const populateBottom = result => {
     let bottomDiv = document.getElementById("bottomDiv");
     bottomDiv.innerHTML = "";
-    let popDup = result.cloneNode(true);
-    popDup.className = "popDup";
-    bottomDiv.appendChild(popDup);
+    if (bottomDiv.shadowRoot) {
+      let popDup = bottomDiv.shadowRoot.querySelector(".popDup")
+      popDup.innerHTML = result.innerHTML;
+    } else {
+      let shadowRoot = bottomDiv.attachShadow({mode: 'open'});
+      shadowRoot.innerHTML = `
+      <link rel="stylesheet" href="styles.css">
+        <style>
+          :host {
+            all: initial;
+          }
+        </style>
+        `;
+        let popDup = result.cloneNode(true);
+        popDup.className = "popDup";
+        shadowRoot.appendChild(popDup);
+    }
   };
 
   const addSpinner = () => {
@@ -108,7 +122,7 @@ let duderino = () => {
     for (var i = 0 ; i < timeouts.length; i++) {
       clearTimeout(timeouts[i]);
     }
-    // closeTimer();
+    closeTimer();
   };
 
   const makeSpans = () => {
@@ -185,9 +199,9 @@ let duderino = () => {
       timeouts = [];
     });
 
-    // bottomDiv.addEventListener("mouseleave", (e) => {
-    //   closeTimer();
-    // });
+    bottomDiv.addEventListener("mouseleave", (e) => {
+      closeTimer();
+    });
 
     document.body.appendChild(bottomDiv);
   };
