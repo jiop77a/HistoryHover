@@ -68,17 +68,36 @@ let duderino = () => {
   const populateBottom = result => {
     let bottomDiv = document.getElementById("bottomDiv");
     bottomDiv.innerHTML = "";
-    let popDup = result.cloneNode(true);
-    popDup.className = "popDup";
-    bottomDiv.appendChild(popDup);
+    if (bottomDiv.shadowRoot) {
+      let popDup = bottomDiv.shadowRoot.querySelector("div");
+      popDup.className = 'popDup';
+      popDup.innerHTML = result.innerHTML;
+    } else {
+      let shadowRoot = bottomDiv.attachShadow({mode: 'open'});
+      shadowRoot.innerHTML = `
+      <link rel="stylesheet" href="styles.css">
+        `;
+      let popDup = result.cloneNode(true);
+      popDup.className = "popDup";
+      shadowRoot.appendChild(popDup);
+    }
   };
 
   const addSpinner = () => {
     let bottomDiv = document.getElementById("bottomDiv");
     bottomDiv.innerHTML = "";
-    let spinner = document.createElement("div");
-    spinner.className = "loader";
-    bottomDiv.appendChild(spinner);
+    if (bottomDiv.shadowRoot) {
+      let popDupMaybe = bottomDiv.shadowRoot.querySelector("div")
+      if (popDupMaybe.className !== "loader") {
+        popDupMaybe.innerHTML = "<div class='loader'></div>";
+      }
+    } else {
+      let shadowRoot = bottomDiv.attachShadow({mode: 'open'});
+      shadowRoot.innerHTML = `
+      <link rel="stylesheet" href="styles.css">
+      <div class='loader'></div>
+        `;
+      }
   };
 
   const mouseEnterWord = (e) => {
