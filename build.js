@@ -217,3 +217,4 @@ let duderino = () => {
 };
 
 duderino();
+// document.addEventListener('DOMContentLoaded', duderino);
