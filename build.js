@@ -75,7 +75,7 @@ let duderino = () => {
     } else {
       let shadowRoot = bottomDiv.attachShadow({mode: 'open'});
       shadowRoot.innerHTML = `
-      <link rel="stylesheet" href="styles.css">
+      <link rel="stylesheet" href=${chrome.extension.getURL('styles.css')}>
         `;
       let popDup = result.cloneNode(true);
       popDup.className = "popDup";
@@ -94,7 +94,7 @@ let duderino = () => {
     } else {
       let shadowRoot = bottomDiv.attachShadow({mode: 'open'});
       shadowRoot.innerHTML = `
-      <link rel="stylesheet" href="styles.css">
+      <link rel="stylesheet" href=${chrome.extension.getURL('styles.css')}>
       <div class='loader'></div>
         `;
       }
