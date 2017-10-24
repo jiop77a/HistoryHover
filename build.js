@@ -76,11 +76,6 @@ let duderino = () => {
       let shadowRoot = bottomDiv.attachShadow({mode: 'open'});
       shadowRoot.innerHTML = `
       <link rel="stylesheet" href=${chrome.extension.getURL('styles.css')}>
-      <style>
-        :host {
-          all: initial;
-        }
-      </style>
         `;
       let popDup = result.cloneNode(true);
       popDup.className = "popDup";
@@ -141,9 +136,10 @@ let duderino = () => {
       NodeFilter.SHOW_TEXT,
       {
         acceptNode: node => {
-          if ((!/^\s*$/.test(node.data)) &&
-          (node.parentNode.nodeName !== 'SCRIPT') &&
-          (node.parentNode.nodeName !== 'SPAN')
+          if ((!/^\s*$/.test(node.data))
+          && (node.parentNode.nodeName !== 'SCRIPT')
+          //amazon.com cart hack:
+          && (node.parentNode.className !== "navFooterBackToTopText")
           //baaqmd.gov hack:
           && (node.parentNode.parentNode.className !== 'status-info')
         ) {
