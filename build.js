@@ -211,7 +211,8 @@ let duderino = () => {
     });
 
     bottomDiv.addEventListener("mouseleave", (e) => {
-      closeTimer();
+      bottomDiv.className = "invisible";
+      // closeTimer();
     });
 
     document.body.appendChild(bottomDiv);
