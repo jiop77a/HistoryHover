@@ -19,8 +19,15 @@ const getTabId = async () => {
 
 chrome.browserAction.onClicked.addListener(() => {
   getTabId().then(tabId => {
-    tabMap[tabId] = !tabMap[tabId];
-    chrome.tabs.reload(tabId);
+    if (tabMap[tabId]) {
+      tabMap[tabId] = !tabMap[tabId];
+      chrome.tabs.reload(tabId);
+    } else {
+      console.log("send message now")
+      tabMap[tabId] = !tabMap[tabId];
+      setIconActive(tabId);
+      chrome.tabs.sendMessage(tabId, {msg: "runDude"});
+    }
   });
 });
 

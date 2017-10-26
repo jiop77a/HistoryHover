@@ -232,4 +232,12 @@ chrome.runtime.sendMessage({msg: "getStatus"}, (response) => {
    }
 });
 
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log("got message");
+  console.log(request);
+  if (request.msg == "runDude") {
+    duderino();
+  }
+})
+
 // document.addEventListener('DOMContentLoaded', duderino);
