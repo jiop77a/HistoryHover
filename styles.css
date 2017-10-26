@@ -1,46 +1,19 @@
-.invisible, .popup {
+.etym-invisible, .etym-popup {
   display: none
 }
 
-#bottomDiv, .loader {
-  max-height: 50vh;
-  z-index: 100;
-  bottom: 0
+.etym-visible {
+  display: inline-block;
 }
 
-:host {
-  all: initial
-}
-
-blockquote, body {
-  margin: 10px
-}
-
-.alexClass:hover {
+etym-span:hover {
   background-color: #ff0
 }
 
-.popDup div:last-child {
-  margin-bottom: auto
-}
-
-.popDup div {
-  margin-bottom: 10px
-}
-
-.popDup {
-  background-color: #fffbec;
-  border-radius: 4px;
-  padding: 10px;
-  line-height: normal;
-  font-size: 12px;
-  color: #2f4f4f;
-  box-sizing: border-box;
-  width: 100%;
-  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif
-}
-
-#bottomDiv {
+#etym-bottomDiv {
+  max-height: 50vh;
+  z-index: 100;
+  bottom: 0;
   background: 0 0;
   position: fixed;
   left: 50%;
@@ -49,46 +22,6 @@ blockquote, body {
   border-radius: 5px;
   margin-bottom: 20px;
   box-shadow: 0 0 30px #2f4f4f;
-}
-
-.visible {
-  display: inline-block;
-}
-
-.title {
-  display: block;
-  font-size: 24px;
-  margin: 0 0 10px;
-  font-weight: 700;
-  color: #800020;
-}
-
-.loader {
-  background-color: #fffbec;
-  box-shadow: none;
-  border: 16px solid #f3f3f3;
-  border-top: 16px solid #3498db;
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  animation: spin 2s linear infinite
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0)
-  }
-  100% {
-    transform: rotate(360deg)
-  }
-}
-
-.crossreference, .foreign {
-  font-style: italic
-}
-
-.freeform, .inline-site-toc li.toplevel.show span:first-of-type {
-  display: none
 }
 
 .inline-site-toc a {

@@ -23,7 +23,6 @@ chrome.browserAction.onClicked.addListener(() => {
       tabMap[tabId] = !tabMap[tabId];
       chrome.tabs.reload(tabId);
     } else {
-      console.log("send message now")
       tabMap[tabId] = !tabMap[tabId];
       setIconActive(tabId);
       chrome.tabs.sendMessage(tabId, {msg: "runDude"});

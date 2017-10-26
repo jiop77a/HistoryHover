@@ -59,14 +59,14 @@ let duderino = () => {
 
   let closeTimer = () => {
     console.log("close timer set");
-    let bottomDiv = document.getElementById("bottomDiv");
+    let bottomDiv = document.getElementById("etym-bottomDiv");
     timeouts.push(setTimeout(() => {
-      bottomDiv.className = "invisible";
+      bottomDiv.className = "etym-invisible";
     }, 1000));
   };
 
   const populateBottom = result => {
-    let bottomDiv = document.getElementById("bottomDiv");
+    let bottomDiv = document.getElementById("etym-bottomDiv");
     bottomDiv.innerHTML = "";
     if (bottomDiv.shadowRoot) {
       let popDup = bottomDiv.shadowRoot.querySelector("div");
@@ -84,7 +84,7 @@ let duderino = () => {
   };
 
   const addSpinner = () => {
-    let bottomDiv = document.getElementById("bottomDiv");
+    let bottomDiv = document.getElementById("etym-bottomDiv");
     bottomDiv.innerHTML = "";
     if (bottomDiv.shadowRoot) {
       let popDupMaybe = bottomDiv.shadowRoot.querySelector("div")
@@ -94,7 +94,7 @@ let duderino = () => {
     } else {
       let shadowRoot = bottomDiv.attachShadow({mode: 'open'});
       shadowRoot.innerHTML = `
-      <link rel="stylesheet" href=${chrome.extension.getURL('styles.css')}>
+      <link rel="stylesheet" href=${chrome.extension.getURL('tryles.css')}>
       <div class='popDup'><div class='loader'></div></div>
         `;
       }
@@ -102,16 +102,16 @@ let duderino = () => {
 
   const mouseEnterWord = (e) => {
     console.log("open timer set");
-    let bottomDiv = document.getElementById("bottomDiv");
+    let bottomDiv = document.getElementById("etym-bottomDiv");
     timeouts.push(setTimeout(() => {
-      bottomDiv.className = "visible";
+      bottomDiv.className = "etym-visible";
       let el = e.target;
       if (el.lastChild.classList === undefined) {
         addSpinner();
         let preText = e.target.innerHTML;
         let text = preText.replace(/^\W+/, "").replace(/\W+$/, "");
         getEtym(text).then(result => {
-          result.className = "popup";
+          result.className = "etym-popup";
           el.appendChild(result);
 
           populateBottom(result);
@@ -165,7 +165,7 @@ let duderino = () => {
     };
 
     const makeSpan = (txt, attrs) => {
-      let s = document.createElement("my-span");
+      let s = document.createElement("etym-span");
       for (let prop in attrs) {
         if (attrs.hasOwnProperty(prop)) {
           s[prop] = attrs[prop];
@@ -185,14 +185,14 @@ let duderino = () => {
 
       insertBefore(
         makeSpan(words[0], {
-          id: idNum++, className: "alexClass" }),
+          id: idNum++}),
         n
       );
       for (let j = 1; j < words.length; j++) {
         insertBefore(makeText(" "), n);
         insertBefore(
           makeSpan(words[j], {
-            id: idNum++, className: "alexClass" }),
+            id: idNum++}),
           n
         );
       }
@@ -202,8 +202,8 @@ let duderino = () => {
 
   let makeBottomDiv = () => {
     let bottomDiv = document.createElement("div");
-    bottomDiv.id = "bottomDiv";
-    bottomDiv.className = "invisible";
+    bottomDiv.id = "etym-bottomDiv";
+    bottomDiv.className = "etym-invisible";
 
     bottomDiv.addEventListener("mouseenter", (e) => {
       for (var i = 0 ; i < timeouts.length ; i++) {
@@ -213,7 +213,7 @@ let duderino = () => {
     });
 
     bottomDiv.addEventListener("mouseleave", (e) => {
-      bottomDiv.className = "invisible";
+      bottomDiv.className = "etym-invisible";
       // closeTimer();
     });
 
@@ -233,8 +233,6 @@ chrome.runtime.sendMessage({msg: "getStatus"}, (response) => {
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log("got message");
-  console.log(request);
   if (request.msg == "runDude") {
     duderino();
   }
