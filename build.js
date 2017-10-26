@@ -136,14 +136,13 @@ let duderino = () => {
       NodeFilter.SHOW_TEXT,
       {
         acceptNode: node => {
-          if ((!/^\s*$/.test(node.data))
-          && (node.parentNode.nodeName !== 'SCRIPT')
-          && (node.parentNode.nodeName !== 'STYLE')
-          //amazon.com cart hack:
-          && (node.parentNode.className !== "navFooterBackToTopText")
-          //baaqmd.gov hack:
-          && (node.parentNode.parentNode.className !== 'status-info')
-        ) {
+          if (
+              (!/^\s*$/.test(node.data))
+              && (node.parentNode.nodeName !== 'SCRIPT')
+              && (node.parentNode.nodeName !== 'STYLE')
+              //amazon.com cart hack:
+              && (node.parentNode.className !== "navFooterBackToTopText")
+            ) {
             return NodeFilter.FILTER_ACCEPT;
           }
         }
