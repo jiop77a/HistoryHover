@@ -21,6 +21,15 @@ let duderino = () => {
     return final
   }
 
+  const giveCredit = (list) => {
+    let credit = document.createElement('div');
+    credit.className = "credit";
+    credit.innerHTML =
+    `Powered by: <a href="http://www.etymonline.com">etymonline</a>`
+    list.appendChild(credit);
+    return list
+  }
+
   const successResponse = (text) => {
     let parser = new DOMParser();
     let htmlDoc = parser.parseFromString(text, "text/html");
@@ -32,12 +41,7 @@ let duderino = () => {
       let definition = div.lastChild.lastChild;
       list.appendChild(assembleResponse(title, definition));
     }
-    let credit = document.createElement('div');
-    credit.className = "credit";
-    credit.innerHTML =
-    `Powered by: <a href="http://www.etymonline.com">etymonline</a>`
-    list.appendChild(credit);
-    return list;
+    return giveCredit(list);
   }
 
   const failResponse = () => {
@@ -132,7 +136,7 @@ let duderino = () => {
     for (var i = 0 ; i < timeouts.length; i++) {
       clearTimeout(timeouts[i]);
     }
-    // closeTimer();
+    closeTimer();
   };
 
   const makeSpans = () => {
@@ -215,10 +219,10 @@ let duderino = () => {
       timeouts = [];
     });
 
-    // bottomDiv.addEventListener("mouseleave", (e) => {
-    //   bottomDiv.className = "etym-invisible";
-    //   // closeTimer();
-    // });
+    bottomDiv.addEventListener("mouseleave", (e) => {
+      bottomDiv.className = "etym-invisible";
+      // closeTimer();
+    });
 
     document.body.appendChild(bottomDiv);
   };
@@ -228,11 +232,17 @@ let duderino = () => {
 
 };
 
-chrome.runtime.sendMessage({msg: "getStatus"}, (response) => {
-  console.log(response);
-   if (response.status) {
-     duderino();
-   }
+const sendMessage = () => {
+  chrome.runtime.sendMessage({msg: "getStatus"}, (response) => {
+    console.log(response);
+     if (response.status) {
+       duderino();
+     }
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(sendMessage, 1000);
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -240,5 +250,3 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     duderino();
   }
 })
-
-// document.addEventListener('DOMContentLoaded', duderino);

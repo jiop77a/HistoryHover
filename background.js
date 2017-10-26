@@ -12,33 +12,37 @@ const setIconActive = (tabId) => {
   chrome.browserAction.setIcon({path: "icon16.png", tabId});
 };
 
-const getTabId = async () => {
+const getTabInfo = async () => {
   let tabs = await chromep.tabs.query({active: true, currentWindow: true});
-  return tabs[0].id;
+  let current = tabs[0];
+  return {url: current.url, id: current.id};
 }
 
 chrome.browserAction.onClicked.addListener(() => {
-  getTabId().then(tabId => {
-    if (tabMap[tabId]) {
-      tabMap[tabId] = !tabMap[tabId];
-      chrome.tabs.reload(tabId);
+  getTabInfo().then(info => {
+    let {url, id} = info;
+    if (tabMap[id].active) {
+      tabMap[id].active = !tabMap[id].active;
+      chrome.tabs.reload(id);
     } else {
-      tabMap[tabId] = !tabMap[tabId];
-      setIconActive(tabId);
-      chrome.tabs.sendMessage(tabId, {msg: "runDude"});
+      tabMap[id].active = !tabMap[id].active;
+      setIconActive(id);
+      chrome.tabs.sendMessage(id, {msg: "runDude"});
     }
   });
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.msg == "getStatus") {
-      getTabId().then(tabId => {
-        if (tabMap.hasOwnProperty(tabId)) {
-          tabMap[tabId] ? setIconActive(tabId) : setIconInactive(tabId);
+      getTabInfo().then(info => {
+        let {url, id} = info;
+        if (tabMap.hasOwnProperty(id)) {
+          tabMap[id].active ? setIconActive(id) : setIconInactive(id);
         } else {
-          tabMap[tabId] = true;
+          tabMap[id] = {active: true, url};
+          
         }
-        sendResponse({status: tabMap[tabId], tabId});
+        sendResponse({status: tabMap[id].active, id});
       });
       return true;
     }

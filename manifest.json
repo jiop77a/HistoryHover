@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "HistoryHover",
-  "version": "1.0",
+  "version": "0.1.0",
   "description": "Get's the etymology of any word on a webpage",
   "icons": {
     "128": "icon128.png",
@@ -25,7 +25,7 @@
   "content_scripts": [
     {
       "matches": ["*://*/*"],
-      "exclude_matches": ["https://*.google.com/*"],
+      "run_at": "document_start",
       "js": ["build.js"],
       "css": ["styles.css"]
     }

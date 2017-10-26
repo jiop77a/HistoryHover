@@ -14,10 +14,13 @@ a {
   font-style: italic
 }
 
-.popDup div:last-child {
-  margin-bottom: auto;
+.credit {
   text-align: center;
   font-size: 10px;
+}
+
+.popDup div:last-child {
+  margin-bottom: auto;
 }
 
 .popDup div {
