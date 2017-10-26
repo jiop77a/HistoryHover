@@ -32,6 +32,11 @@ let duderino = () => {
       let definition = div.lastChild.lastChild;
       list.appendChild(assembleResponse(title, definition));
     }
+    let credit = document.createElement('div');
+    credit.className = "credit";
+    credit.innerHTML =
+    `Powered by: <a href="http://www.etymonline.com">etymonline</a>`
+    list.appendChild(credit);
     return list;
   }
 
@@ -127,7 +132,7 @@ let duderino = () => {
     for (var i = 0 ; i < timeouts.length; i++) {
       clearTimeout(timeouts[i]);
     }
-    closeTimer();
+    // closeTimer();
   };
 
   const makeSpans = () => {
@@ -140,8 +145,6 @@ let duderino = () => {
               (!/^\s*$/.test(node.data))
               && (node.parentNode.nodeName !== 'SCRIPT')
               && (node.parentNode.nodeName !== 'STYLE')
-              //amazon.com cart hack:
-              && (node.parentNode.className !== "navFooterBackToTopText")
             ) {
             return NodeFilter.FILTER_ACCEPT;
           }
@@ -212,10 +215,10 @@ let duderino = () => {
       timeouts = [];
     });
 
-    bottomDiv.addEventListener("mouseleave", (e) => {
-      bottomDiv.className = "etym-invisible";
-      // closeTimer();
-    });
+    // bottomDiv.addEventListener("mouseleave", (e) => {
+    //   bottomDiv.className = "etym-invisible";
+    //   // closeTimer();
+    // });
 
     document.body.appendChild(bottomDiv);
   };

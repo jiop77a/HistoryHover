@@ -6,7 +6,7 @@ blockquote {
   margin: 10px
 }
 
-.crossreference a {
+a {
   color: #800020
 }
 
@@ -15,7 +15,9 @@ blockquote {
 }
 
 .popDup div:last-child {
-  margin-bottom: auto
+  margin-bottom: auto;
+  text-align: center;
+  font-size: 10px;
 }
 
 .popDup div {
