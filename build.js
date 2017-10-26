@@ -138,6 +138,7 @@ let duderino = () => {
         acceptNode: node => {
           if ((!/^\s*$/.test(node.data))
           && (node.parentNode.nodeName !== 'SCRIPT')
+          && (node.parentNode.nodeName !== 'STYLE')
           //amazon.com cart hack:
           && (node.parentNode.className !== "navFooterBackToTopText")
           //baaqmd.gov hack:
@@ -165,7 +166,7 @@ let duderino = () => {
     };
 
     const makeSpan = (txt, attrs) => {
-      let s = document.createElement("span");
+      let s = document.createElement("my-span");
       for (let prop in attrs) {
         if (attrs.hasOwnProperty(prop)) {
           s[prop] = attrs[prop];
@@ -184,13 +185,15 @@ let duderino = () => {
       let words = txt.split(" ");
 
       insertBefore(
-        makeSpan(words[0], { id: idNum++, className: "alexClass" }),
+        makeSpan(words[0], {
+          id: idNum++, className: "alexClass" }),
         n
       );
       for (let j = 1; j < words.length; j++) {
         insertBefore(makeText(" "), n);
         insertBefore(
-          makeSpan(words[j], { id: idNum++, className: "alexClass" }),
+          makeSpan(words[j], {
+            id: idNum++, className: "alexClass" }),
           n
         );
       }
@@ -223,5 +226,11 @@ let duderino = () => {
 
 };
 
-duderino();
+chrome.runtime.sendMessage({msg: "getStatus"}, (response) => {
+  console.log(response);
+   if (response.status) {
+     duderino();
+   }
+});
+
 // document.addEventListener('DOMContentLoaded', duderino);
