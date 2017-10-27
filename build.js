@@ -30,20 +30,6 @@ let duderino = () => {
     return list
   }
 
-  const successResponse = (text) => {
-    let parser = new DOMParser();
-    let htmlDoc = parser.parseFromString(text, "text/html");
-    let divs = htmlDoc.querySelectorAll(".word--C9UPa");
-    let list = document.createElement('div');
-    for (let i = 0; i < divs.length; i++) {
-      let div = divs[i].firstChild;
-      let title = div.firstChild;
-      let definition = div.lastChild.lastChild;
-      list.appendChild(assembleResponse(title, definition));
-    }
-    return giveCredit(list);
-  }
-
   const failResponse = () => {
     let title = document.createElement('h1');
     title.innerHTML = "Sorry! (interj.)";
@@ -52,6 +38,25 @@ let duderino = () => {
 
     return assembleResponse(title, definition);
   }
+
+  const successResponse = (text) => {
+    let parser = new DOMParser();
+    let htmlDoc = parser.parseFromString(text, "text/html");
+    let divs = htmlDoc.querySelectorAll(".word--C9UPa");
+    if (divs.length > 0) {
+      let list = document.createElement('div');
+      for (let i = 0; i < divs.length; i++) {
+        let div = divs[i].firstChild;
+        let title = div.firstChild;
+        let definition = div.lastChild.lastChild;
+        list.appendChild(assembleResponse(title, definition));
+      }
+      return giveCredit(list);
+    } else {
+      return failResponse();
+    }
+  }
+
 
   const getEtym = async word => {
     const proxyurl = "https://yes-proxy.herokuapp.com/";
@@ -76,14 +81,12 @@ let duderino = () => {
 
   const populateBottom = result => {
     let bottomDiv = document.getElementById("etym-bottomDiv");
-    bottomDiv.innerHTML = "";
     let popDup = bottomDiv.shadowRoot.querySelector("div");
     popDup.innerHTML = result.innerHTML;
   };
 
   const addSpinner = () => {
     let bottomDiv = document.getElementById("etym-bottomDiv");
-    bottomDiv.innerHTML = "";
     let popDup = bottomDiv.shadowRoot.querySelector("div");
     popDup.innerHTML = "<div class='loader'></div>";
   };
