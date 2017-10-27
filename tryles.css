@@ -3,7 +3,10 @@
 }
 
 blockquote {
-  margin: 10px
+  -webkit-margin-end: 0px;
+  -webkit-margin-start: 0px;
+  padding-left: 8px;
+  border-left: 6px solid #e4dfca;
 }
 
 a {

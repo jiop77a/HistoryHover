@@ -118,7 +118,7 @@ let duderino = () => {
     for (var i = 0 ; i < timeouts.length; i++) {
       clearTimeout(timeouts[i]);
     }
-    closeTimer();
+    // closeTimer();
   };
 
   const makeSpans = () => {
@@ -203,10 +203,10 @@ let duderino = () => {
       timeouts = [];
     });
 
-    bottomDiv.addEventListener("mouseleave", (e) => {
-      bottomDiv.className = "etym-invisible";
-      // closeTimer();
-    });
+    // bottomDiv.addEventListener("mouseleave", (e) => {
+    //   bottomDiv.className = "etym-invisible";
+    //   // closeTimer();
+    // });
 
     let shadowRoot = bottomDiv.attachShadow({mode: 'open'});
     shadowRoot.innerHTML = `
