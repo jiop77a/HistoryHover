@@ -12,7 +12,7 @@ etym-span:hover {
 
 #etym-bottomDiv {
   max-height: 50vh;
-  z-index: 100;
+  z-index: 2147483645;
   bottom: 0;
   background: 0 0;
   position: fixed;
@@ -23,13 +23,3 @@ etym-span:hover {
   margin-bottom: 20px;
   box-shadow: 0 0 30px #2f4f4f;
 }
-
-/*developer.chrome.com hack*/
-
-/*.inline-site-toc a {
-  display: -webkit-box !important;
-}
-
-.inline-toc a {
-  display: -webkit-box !important;
-}*/
