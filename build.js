@@ -76,7 +76,7 @@ let duderino = () => {
     let bottomDiv = document.getElementById("etym-bottomDiv");
     timeouts.push(setTimeout(() => {
       bottomDiv.className = "etym-invisible";
-    }, 1000));
+    }, 500));
   };
 
   const populateBottom = result => {
@@ -111,7 +111,7 @@ let duderino = () => {
         result = el.lastChild;
         populateBottom(result);
       }
-    }, 1000));
+    }, 750));
   };
 
   const mouseLeaveWord = () => {
