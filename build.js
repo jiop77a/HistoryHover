@@ -77,36 +77,15 @@ let duderino = () => {
   const populateBottom = result => {
     let bottomDiv = document.getElementById("etym-bottomDiv");
     bottomDiv.innerHTML = "";
-    if (bottomDiv.shadowRoot) {
-      let popDup = bottomDiv.shadowRoot.querySelector("div");
-      popDup.className = 'popDup';
-      popDup.innerHTML = result.innerHTML;
-    } else {
-      let shadowRoot = bottomDiv.attachShadow({mode: 'open'});
-      shadowRoot.innerHTML = `
-      <link rel="stylesheet" href=${chrome.extension.getURL('styles.css')}>
-        `;
-      let popDup = result.cloneNode(true);
-      popDup.className = "popDup";
-      shadowRoot.appendChild(popDup);
-    }
+    let popDup = bottomDiv.shadowRoot.querySelector("div");
+    popDup.innerHTML = result.innerHTML;
   };
 
   const addSpinner = () => {
     let bottomDiv = document.getElementById("etym-bottomDiv");
     bottomDiv.innerHTML = "";
-    if (bottomDiv.shadowRoot) {
-      let popDupMaybe = bottomDiv.shadowRoot.querySelector("div")
-      if (popDupMaybe.className !== "loader") {
-        popDupMaybe.innerHTML = "<div class='loader'></div>";
-      }
-    } else {
-      let shadowRoot = bottomDiv.attachShadow({mode: 'open'});
-      shadowRoot.innerHTML = `
-      <link rel="stylesheet" href=${chrome.extension.getURL('tryles.css')}>
-      <div class='popDup'><div class='loader'></div></div>
-        `;
-      }
+    let popDup = bottomDiv.shadowRoot.querySelector("div");
+    popDup.innerHTML = "<div class='loader'></div>";
   };
 
   const mouseEnterWord = (e) => {
@@ -156,6 +135,7 @@ let duderino = () => {
         }
       }
     );
+
     let textNodes = [];
 
     while (treeWalker.nextNode()) {
@@ -224,6 +204,12 @@ let duderino = () => {
       bottomDiv.className = "etym-invisible";
       // closeTimer();
     });
+
+    let shadowRoot = bottomDiv.attachShadow({mode: 'open'});
+    shadowRoot.innerHTML = `
+    <link rel="stylesheet" href=${chrome.extension.getURL('tryles.css')}>
+    <div class='popDup'></div>
+      `;
 
     document.body.appendChild(bottomDiv);
   };
