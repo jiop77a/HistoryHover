@@ -26,10 +26,10 @@ etym-span:hover {
 
 /*developer.chrome.com hack*/
 
-.inline-site-toc a {
+/*.inline-site-toc a {
   display: -webkit-box !important;
 }
 
 .inline-toc a {
   display: -webkit-box !important;
-}
+}*/

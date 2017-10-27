@@ -149,6 +149,7 @@ let duderino = () => {
               (!/^\s*$/.test(node.data))
               && (node.parentNode.nodeName !== 'SCRIPT')
               && (node.parentNode.nodeName !== 'STYLE')
+              && (getComputedStyle(node.parentNode).display !== 'flex')
             ) {
             return NodeFilter.FILTER_ACCEPT;
           }
