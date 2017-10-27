@@ -15,6 +15,7 @@ const setIconActive = (tabId) => {
 const getTabInfo = async () => {
   let tabs = await chromep.tabs.query({active: true, currentWindow: true});
   let current = tabs[0];
+  let url = current.url || "";
   return {url: current.url, id: current.id};
 }
 
@@ -38,9 +39,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         let {url, id} = info;
         if (tabMap.hasOwnProperty(id)) {
           tabMap[id].active ? setIconActive(id) : setIconInactive(id);
+          tabMap[id].url = url;
         } else {
           tabMap[id] = {active: true, url};
-          
+
         }
         sendResponse({status: tabMap[id].active, id});
       });
