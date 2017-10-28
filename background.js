@@ -21,7 +21,7 @@ const getTabInfo = async () => {
 const startTimer = (tabId, url) => {
   timeout = setTimeout((() => {
     tabMap[tabId].url = url;
-    chrome.tabs.sendMessage(tabId, {msg: "runDude received from background"});
+    chrome.tabs.sendMessage(tabId, {msg: "runDude2"});
   }), 1000);
   chrome.tabs.sendMessage(tabId, {msg: "timer started in background"});
 }
@@ -35,7 +35,6 @@ chrome.browserAction.onClicked.addListener(() => {
     } else {
       tabMap[id].active = !tabMap[id].active;
       setIconActive(id);
-      chrome.tabs.sendMessage(id, {msg: "runDude"});
     }
   });
 });
@@ -44,14 +43,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.msg == "getStatus") {
     clearTimeout(timeout);
     let {id, url} = sender.tab;
-    chrome.tabs.sendMessage(id, {msg: "timer cleared in background"});
-    if (tabMap.hasOwnProperty(id)) {
+    if (tabMap[id] !== undefined) {
       tabMap[id].active ? setIconActive(id) : setIconInactive(id);
       tabMap[id].url = url;
     } else {
       tabMap[id] = {active: true, url};
     }
-    sendResponse({status: tabMap[id].active, id});
+    sendResponse({status: tabMap[id].active});
     return true;
   }
 });

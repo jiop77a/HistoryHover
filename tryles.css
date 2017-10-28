@@ -42,7 +42,7 @@ a {
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif
 }
 
-.title {
+.title, .tryAgain {
   display: block;
   font-size: 24px;
   margin: 0 0 10px;

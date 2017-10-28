@@ -13,9 +13,12 @@ let duderino = () => {
   }
 
   const assembleResponse = (title, definition) => {
-    title.className = "title";
     let final = document.createElement('div');
+    if (title.className === "tryAgain") {
+      final.className = "tryAgain";
+    }
     let body = fixLinks(definition);
+    title.className = "title";
     final.appendChild(title);
     final.appendChild(body);
     return final
@@ -30,11 +33,17 @@ let duderino = () => {
     return list
   }
 
-  const failResponse = () => {
+  const failResponse = (response) => {
     let title = document.createElement('h1');
-    title.innerHTML = "Sorry! (interj.)";
     let definition = document.createElement('object');
-    definition.innerHTML = "The word you're looking for cannot be found :(";
+    if (response === "502") {
+      title.className = "tryAgain";
+      title.innerHTML = "Woah! (interj.)";
+      definition.innerHTML = "Network busy. Try again soon!";
+    } else {
+      title.innerHTML = "Sorry! (interj.)";
+      definition.innerHTML = "The word you're looking for cannot be found :(";
+    }
 
     return assembleResponse(title, definition);
   }
@@ -63,9 +72,12 @@ let duderino = () => {
     let url = `http://www.etymonline.com/word/${word}`;
 
     let response = await fetch(proxyurl + url);
+    console.log(response.status);
     if (response.ok) {
       let text = await response.text();
       return successResponse(text);
+    } else if (response.status === 502) {
+      return failResponse("502");
     } else {
       return failResponse();
     }
@@ -102,8 +114,10 @@ let duderino = () => {
         let preText = e.target.innerHTML;
         let text = preText.replace(/^\W+/, "").replace(/\W+$/, "");
         getEtym(text).then(result => {
+          if (result.className !== "tryAgain") {
+            el.appendChild(result);
+          }
           result.className = "etym-popup";
-          el.appendChild(result);
 
           populateBottom(result);
         });
@@ -226,7 +240,7 @@ let duderino = () => {
 };
 
 const sendMessage = () => {
-  console.log("load: sending dude from build");
+  console.log("1 sec past load: sending dude from build");
   chrome.runtime.sendMessage({msg: "getStatus"}, (response) => {
      if (response.status) {
        console.log("status active, running duderino");
@@ -245,7 +259,7 @@ window.addEventListener('load', () => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log(request.msg);
-  if (request.msg == "runDude") {
+  if (request.msg == "runDude" || request.msg == "runDude2") {
     duderino();
   }
 })
