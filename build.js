@@ -72,7 +72,7 @@ let duderino = () => {
   };
 
   let closeTimer = () => {
-    console.log("close timer set");
+    // console.log("close timer set");
     let bottomDiv = document.getElementById("etym-bottomDiv");
     timeouts.push(setTimeout(() => {
       bottomDiv.className = "etym-invisible";
@@ -92,7 +92,7 @@ let duderino = () => {
   };
 
   const mouseEnterWord = (e) => {
-    console.log("open timer set");
+    // console.log("open timer set");
     let bottomDiv = document.getElementById("etym-bottomDiv");
     timeouts.push(setTimeout(() => {
       bottomDiv.className = "etym-visible";
@@ -131,6 +131,7 @@ let duderino = () => {
               (!/^\s*$/.test(node.data))
               && (node.parentNode.nodeName !== 'SCRIPT')
               && (node.parentNode.nodeName !== 'STYLE')
+              && (node.parentNode.nodeName !== 'ETYM-SPAN')
               && (getComputedStyle(node.parentNode).display !== 'flex')
             ) {
             return NodeFilter.FILTER_ACCEPT;
@@ -217,25 +218,33 @@ let duderino = () => {
     document.body.appendChild(bottomDiv);
   };
 
-  makeBottomDiv();
-  makeSpans();
+  if (document.querySelector("#etym-bottomDiv") === null) {
+    makeBottomDiv();
+  }
 
+  makeSpans();
 };
 
 const sendMessage = () => {
+  console.log("load: sending dude from build");
   chrome.runtime.sendMessage({msg: "getStatus"}, (response) => {
-    console.log(response);
      if (response.status) {
+       console.log("status active, running duderino");
        duderino();
      }
   });
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+// sendMessage();
+
+// setTimeout(sendMessage, 1000);
+
+window.addEventListener('load', () => {
     setTimeout(sendMessage, 1000);
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log(request.msg);
   if (request.msg == "runDude") {
     duderino();
   }

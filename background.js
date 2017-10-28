@@ -3,6 +3,7 @@
 const chromep = new ChromePromise();
 
 let tabMap = {};
+let timeout;
 
 const setIconInactive = (tabId) => {
   chrome.browserAction.setIcon({path: "newicon16.png", tabId});
@@ -14,14 +15,20 @@ const setIconActive = (tabId) => {
 
 const getTabInfo = async () => {
   let tabs = await chromep.tabs.query({active: true, currentWindow: true});
-  let current = tabs[0];
-  let [url, id] = (current !== undefined) ? [current.url, current.id] : ["", 0];
-  return {url, id};
+  return tabs[0];
+}
+
+const startTimer = (tabId, url) => {
+  timeout = setTimeout((() => {
+    tabMap[tabId].url = url;
+    chrome.tabs.sendMessage(tabId, {msg: "runDude received from background"});
+  }), 1000);
+  chrome.tabs.sendMessage(tabId, {msg: "timer started in background"});
 }
 
 chrome.browserAction.onClicked.addListener(() => {
-  getTabInfo().then(info => {
-    let {url, id} = info;
+  getTabInfo().then(tab => {
+    let {url, id} = tab;
     if (tabMap[id].active) {
       tabMap[id].active = !tabMap[id].active;
       chrome.tabs.reload(id);
@@ -34,18 +41,34 @@ chrome.browserAction.onClicked.addListener(() => {
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.msg == "getStatus") {
-      getTabInfo().then(info => {
-        let {url, id} = info;
-        if (tabMap.hasOwnProperty(id)) {
-          tabMap[id].active ? setIconActive(id) : setIconInactive(id);
-          tabMap[id].url = url;
-        } else {
-          tabMap[id] = {active: true, url};
-
-        }
-        sendResponse({status: tabMap[id].active, id});
-      });
-      return true;
+  if (request.msg == "getStatus") {
+    clearTimeout(timeout);
+    let {id, url} = sender.tab;
+    chrome.tabs.sendMessage(id, {msg: "timer cleared in background"});
+    if (tabMap.hasOwnProperty(id)) {
+      tabMap[id].active ? setIconActive(id) : setIconInactive(id);
+      tabMap[id].url = url;
+    } else {
+      tabMap[id] = {active: true, url};
     }
+    sendResponse({status: tabMap[id].active, id});
+    return true;
+  }
+});
+
+chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+  delete tabMap[tabId];
+})
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status !== undefined
+    && changeInfo.status === "complete") {
+      if (tabMap[tabId] === undefined) {
+        tabMap[tabId] = {active: true, url: tab.url};
+      }
+      if (tabMap[tabId].active) {
+        startTimer(tabId, tab.url);
+      }
+    return true;
+  }
 });
