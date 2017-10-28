@@ -15,8 +15,8 @@ const setIconActive = (tabId) => {
 const getTabInfo = async () => {
   let tabs = await chromep.tabs.query({active: true, currentWindow: true});
   let current = tabs[0];
-  let url = current.url || "";
-  return {url: current.url, id: current.id};
+  let [url, id] = (current !== undefined) ? [current.url, current.id] : ["", 0];
+  return {url, id};
 }
 
 chrome.browserAction.onClicked.addListener(() => {
