@@ -89,10 +89,25 @@ let duderino = () => {
     }, 500);
   };
 
+  const fixLinksOutside = () => {
+    let bottomDiv = document.getElementById("etym-bottomDiv");
+    let links = bottomDiv.shadowRoot.querySelectorAll("a");
+    for (let i = 0; i < links.length; i++) {
+      links[i].addEventListener('click', (e) => {
+        e.preventDefault();
+        chrome.runtime.sendMessage({
+          msg: "newTab",
+          url: e.target.href
+        });
+      });
+    }
+  }
+
   const populateBottom = result => {
     let bottomDiv = document.getElementById("etym-bottomDiv");
     let popDup = bottomDiv.shadowRoot.querySelector("div");
     popDup.innerHTML = result.innerHTML;
+    fixLinksOutside();
   };
 
   const addSpinner = () => {

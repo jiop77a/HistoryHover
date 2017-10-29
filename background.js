@@ -52,6 +52,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
     sendResponse({status: tabMap[id].active});
     return true;
+  } else if (request.msg == "newTab") {
+    chrome.tabs.create({
+      active: false,
+      url: request.url
+    });
   }
 });
 
