@@ -30,6 +30,7 @@ chrome.browserAction.onClicked.addListener(() => {
   getTabInfo().then(tab => {
     let {url, id} = tab;
     if (tabMap[id].active) {
+      chrome.tabs.sendMessage(tabId, {msg: "runDude"});
       tabMap[id].active = !tabMap[id].active;
       chrome.tabs.reload(id);
     } else {
@@ -65,7 +66,10 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         tabMap[tabId] = {active: true, url: tab.url};
       }
       if (tabMap[tabId].active) {
+        setIconActive(tabId);
         startTimer(tabId, tab.url);
+      } else {
+        setIconInactive(tabId);
       }
     return true;
   }
