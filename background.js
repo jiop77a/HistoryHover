@@ -23,17 +23,17 @@ const startTimer = (tabId, url) => {
     tabMap[tabId].url = url;
     chrome.tabs.sendMessage(tabId, {msg: "runDude2"});
   }), 1000);
-  chrome.tabs.sendMessage(tabId, {msg: "timer started in background"});
+  chrome.tabs.sendMessage(tabId, {msg: "change timer started in background"});
 }
 
 chrome.browserAction.onClicked.addListener(() => {
   getTabInfo().then(tab => {
     let {url, id} = tab;
     if (tabMap[id].active) {
-      chrome.tabs.sendMessage(tabId, {msg: "runDude"});
       tabMap[id].active = !tabMap[id].active;
       chrome.tabs.reload(id);
     } else {
+      chrome.tabs.sendMessage(id, {msg: "runDude"});
       tabMap[id].active = !tabMap[id].active;
       setIconActive(id);
     }

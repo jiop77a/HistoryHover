@@ -1,5 +1,4 @@
 let duderino = () => {
-  let timeouts = [];
 
   const fixLinks = (object) => {
     let links = object.querySelectorAll(".crossreference");
@@ -33,10 +32,10 @@ let duderino = () => {
     return list
   }
 
-  const failResponse = (response) => {
+  const failResponse = (code) => {
     let title = document.createElement('h1');
     let definition = document.createElement('object');
-    if (response === "502") {
+    if (code === "502") {
       title.className = "tryAgain";
       title.innerHTML = "Woah! (interj.)";
       definition.innerHTML = "Network busy. Try again soon!";
@@ -72,7 +71,6 @@ let duderino = () => {
     let url = `http://www.etymonline.com/word/${word}`;
 
     let response = await fetch(proxyurl + url);
-    console.log(response.status);
     if (response.ok) {
       let text = await response.text();
       return successResponse(text);
@@ -86,9 +84,9 @@ let duderino = () => {
   let closeTimer = () => {
     // console.log("close timer set");
     let bottomDiv = document.getElementById("etym-bottomDiv");
-    timeouts.push(setTimeout(() => {
+    setTimeout(() => {
       bottomDiv.className = "etym-invisible";
-    }, 500));
+    }, 500);
   };
 
   const populateBottom = result => {
@@ -106,7 +104,7 @@ let duderino = () => {
   const mouseEnterWord = (e) => {
     // console.log("open timer set");
     let bottomDiv = document.getElementById("etym-bottomDiv");
-    timeouts.push(setTimeout(() => {
+    setTimeout(() => {
       bottomDiv.className = "etym-visible";
       let el = e.target;
       if (el.lastChild.classList === undefined) {
@@ -125,13 +123,18 @@ let duderino = () => {
         result = el.lastChild;
         populateBottom(result);
       }
-    }, 750));
+    }, 750);
   };
 
-  const mouseLeaveWord = () => {
-    for (var i = 0 ; i < timeouts.length; i++) {
-      clearTimeout(timeouts[i]);
+  const clearTimeouts = () => {
+    let highestId = setTimeout(";");
+    for (let i = 0 ; i < highestId ; i++) {
+        clearTimeout(i);
     }
+  }
+
+  const mouseLeaveWord = () => {
+    clearTimeouts();
     closeTimer();
   };
 
@@ -212,10 +215,7 @@ let duderino = () => {
     bottomDiv.className = "etym-invisible";
 
     bottomDiv.addEventListener("mouseenter", (e) => {
-      for (var i = 0 ; i < timeouts.length ; i++) {
-          clearTimeout(timeouts[i]);
-      }
-      timeouts = [];
+      clearTimeouts();
     });
 
     bottomDiv.addEventListener("mouseleave", (e) => {
@@ -240,7 +240,7 @@ let duderino = () => {
 };
 
 const sendMessage = () => {
-  console.log("1 sec past load: sending dude from build");
+  console.log("5 secs past load: sending dude from build");
   chrome.runtime.sendMessage({msg: "getStatus"}, (response) => {
      if (response.status) {
        console.log("status active, running duderino");
@@ -254,7 +254,7 @@ const sendMessage = () => {
 // setTimeout(sendMessage, 1000);
 
 window.addEventListener('load', () => {
-    setTimeout(sendMessage, 1000);
+    setTimeout(sendMessage, 5000);
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
