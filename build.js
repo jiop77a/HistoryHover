@@ -127,7 +127,8 @@ let duderino = () => {
   };
 
   const clearTimeouts = () => {
-    let highestId = setTimeout(";");
+    let func = () => {};
+    let highestId = setTimeout(func);
     for (let i = 0 ; i < highestId ; i++) {
         clearTimeout(i);
     }
