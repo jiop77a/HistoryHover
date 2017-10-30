@@ -168,7 +168,7 @@ let duderino = () => {
               && (node.parentNode.nodeName !== 'SCRIPT')
               && (node.parentNode.nodeName !== 'STYLE')
               && (node.parentNode.nodeName !== 'ETYM-SPAN')
-              && (node.parentNode.className !== 'visually-hidden')
+              && (node.parentNode.nodeName !== 'NOSCRIPT')
               && (getComputedStyle(node.parentNode).display !== 'flex')
             ) {
             return NodeFilter.FILTER_ACCEPT;
