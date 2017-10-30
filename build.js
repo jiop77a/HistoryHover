@@ -1,3 +1,12 @@
+let timeouts = [];
+
+const clearTimeouts = () => {
+  for (let i = 0 ; i < timeouts.length ; i++) {
+      clearTimeout(timeouts[i]);
+  }
+  timeouts = [];
+};
+
 let duderino = () => {
 
   const assembleResponse = (title, definition) => {
@@ -75,9 +84,9 @@ let duderino = () => {
   let closeTimer = () => {
     // console.log("close timer set");
     let bottomDiv = document.getElementById("etym-bottomDiv");
-    setTimeout(() => {
+    timeouts.push(setTimeout(() => {
       bottomDiv.className = "etym-invisible";
-    }, 500);
+    }, 500));
   };
 
   const sendTabMessage = (word) => {
@@ -131,7 +140,7 @@ let duderino = () => {
 
   const mouseEnterWord = (e) => {
     let bottomDiv = document.getElementById("etym-bottomDiv");
-    setTimeout(() => {
+    timeouts.push(setTimeout(() => {
       bottomDiv.className = "etym-visible";
       let el = e.target;
       if (el.lastChild.classList === undefined) {
@@ -140,15 +149,7 @@ let duderino = () => {
         result = el.lastChild;
         populateBottom(result, bottomDiv);
       }
-    }, 750);
-  };
-
-  const clearTimeouts = () => {
-    let func = () => {};
-    let highestId = setTimeout(func);
-    for (let i = 0 ; i < highestId ; i++) {
-        clearTimeout(i);
-    }
+    }, 750));
   };
 
   const mouseLeaveWord = () => {
