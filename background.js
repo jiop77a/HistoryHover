@@ -3,7 +3,6 @@
 const chromep = new ChromePromise();
 
 let tabMap = {};
-let timeout;
 
 const setIconInactive = (tabId) => {
   chrome.browserAction.setIcon({path: "newicon16.png", tabId});
@@ -19,11 +18,11 @@ const getTabInfo = async () => {
 }
 
 const startTimer = (tabId, url) => {
-  timeout = setTimeout((() => {
+  setTimeout(() => {
     tabMap[tabId].url = url;
     chrome.tabs.sendMessage(tabId, {msg: "runDude2"});
-  }), 1000);
-  chrome.tabs.sendMessage(tabId, {msg: "change timer started in background"});
+  }, 5000)
+  chrome.tabs.sendMessage(tabId, {msg: "starting timer for 5 secs after load"})
 }
 
 chrome.browserAction.onClicked.addListener(() => {
@@ -42,7 +41,6 @@ chrome.browserAction.onClicked.addListener(() => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.msg == "getStatus") {
-    clearTimeout(timeout);
     let {id, url} = sender.tab;
     if (tabMap[id] !== undefined) {
       tabMap[id].active ? setIconActive(id) : setIconInactive(id);
@@ -50,7 +48,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     } else {
       tabMap[id] = {active: true, url};
     }
-    sendResponse({status: tabMap[id].active});
+    sendResponse({status: tabMap[id].active})
     return true;
   } else if (request.msg == "newTab") {
     chrome.tabs.create({

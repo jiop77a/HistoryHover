@@ -8,8 +8,8 @@ let duderino = () => {
     title.className = "title";
     final.appendChild(title);
     final.appendChild(definition);
-    return final
-  }
+    return final;
+  };
 
   const giveCredit = (list) => {
     let credit = document.createElement('div');
@@ -17,8 +17,8 @@ let duderino = () => {
     credit.innerHTML =
     `Powered by: <span class="crossreference">etymonline</span>`
     list.appendChild(credit);
-    return list
-  }
+    return list;
+  };
 
   const failResponse = (code) => {
     let title = document.createElement('h1');
@@ -33,30 +33,34 @@ let duderino = () => {
     }
 
     return assembleResponse(title, definition);
-  }
+  };
+
+  const makeList = (divs) => {
+    let list = document.createElement('div');
+    for (let i = 0; i < divs.length; i++) {
+      let div = divs[i].firstChild;
+      let title = div.firstChild;
+      let definition = div.lastChild.lastChild;
+      list.appendChild(assembleResponse(title, definition));
+    }
+    return list;
+  };
 
   const successResponse = (text) => {
     let parser = new DOMParser();
     let htmlDoc = parser.parseFromString(text, "text/html");
     let divs = htmlDoc.querySelectorAll(".word--C9UPa");
     if (divs.length > 0) {
-      let list = document.createElement('div');
-      for (let i = 0; i < divs.length; i++) {
-        let div = divs[i].firstChild;
-        let title = div.firstChild;
-        let definition = div.lastChild.lastChild;
-        list.appendChild(assembleResponse(title, definition));
-      }
+      let list = makeList(divs);
       return giveCredit(list);
     } else {
       return failResponse();
     }
-  }
+  };
 
   const getEtym = async word => {
     const proxyurl = "https://yes-proxy.herokuapp.com/";
     let url = `http://www.etymonline.com/word/${word}`;
-
     let response = await fetch(proxyurl + url);
     if (response.ok) {
       let text = await response.text();
@@ -83,7 +87,8 @@ let duderino = () => {
       msg: "newTab",
       url,
     });
-  }
+  };
+
   const fixLinks = (bottomDiv) => {
     let links = bottomDiv.shadowRoot.querySelectorAll(".crossreference");
     for (let i = 0; i < links.length; i++) {
@@ -91,7 +96,7 @@ let duderino = () => {
         sendTabMessage(e.target.innerText);
       });
     }
-  }
+  };
 
   const populateBottom = (result, bottomDiv) => {
     let popDup = bottomDiv.shadowRoot.querySelector("div");
@@ -106,7 +111,7 @@ let duderino = () => {
 
   const removePunc = (text) => {
     return text.replace(/^\W+/, "").replace(/\W+$/, "");
-  }
+  };
 
   const handleResult = (el, result, bottomDiv) => {
     if (result.className !== "tryAgain") {
@@ -114,19 +119,24 @@ let duderino = () => {
     }
     result.className = "etym-popup";
     populateBottom(result, bottomDiv);
-  }
+  };
+
+  const fetchNewWord = (bottomDiv, el) => {
+    addSpinner(bottomDiv);
+    let text = removePunc(el.innerHTML);
+    getEtym(text).then(result => {
+      handleResult(el, result, bottomDiv);
+    });
+  };
 
   const mouseEnterWord = (e) => {
+    console.log("entered word");
     let bottomDiv = document.getElementById("etym-bottomDiv");
     setTimeout(() => {
       bottomDiv.className = "etym-visible";
       let el = e.target;
       if (el.lastChild.classList === undefined) {
-        addSpinner(bottomDiv);
-        let text = removePunc(el.innerHTML);
-        getEtym(text).then(result => {
-          handleResult(el, result, bottomDiv);
-        });
+        fetchNewWord(bottomDiv, el)
       } else {
         result = el.lastChild;
         populateBottom(result, bottomDiv);
@@ -140,7 +150,7 @@ let duderino = () => {
     for (let i = 0 ; i < highestId ; i++) {
         clearTimeout(i);
     }
-  }
+  };
 
   const mouseLeaveWord = () => {
     clearTimeouts();
@@ -170,7 +180,7 @@ let duderino = () => {
 
     while (treeWalker.nextNode()) {
       textNodes.push(treeWalker.currentNode);
-    }
+    };
 
     const makeText = txt => document.createTextNode(txt);
 
@@ -237,18 +247,14 @@ let duderino = () => {
 };
 
 const sendMessage = () => {
-  console.log("5 secs past load: sending dude from build");
+  console.log("sending dude on load from build");
   chrome.runtime.sendMessage({msg: "getStatus"}, (response) => {
      if (response.status) {
-       console.log("status active, running duderino");
+       console.log("got response active, running duderino");
        duderino();
      }
   });
 }
-
-window.addEventListener('load', () => {
-    setTimeout(sendMessage, 5000);
-});
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log(request.msg);
@@ -256,3 +262,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     duderino();
   }
 })
+
+sendMessage();
+// window.addEventListener('load', sendMessage);
