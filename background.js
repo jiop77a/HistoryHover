@@ -21,8 +21,8 @@ const startTimer = (tabId, url) => {
   setTimeout(() => {
     tabMap[tabId].url = url;
     chrome.tabs.sendMessage(tabId, {msg: "runDude2"});
-  }, 5000)
-  chrome.tabs.sendMessage(tabId, {msg: "starting timer for 5 secs after load"})
+  }, 1000)
+  chrome.tabs.sendMessage(tabId, {msg: "starting timer for 1 sec after load"})
 }
 
 chrome.browserAction.onClicked.addListener(() => {

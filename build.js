@@ -130,7 +130,6 @@ let duderino = () => {
   };
 
   const mouseEnterWord = (e) => {
-    console.log("entered word");
     let bottomDiv = document.getElementById("etym-bottomDiv");
     setTimeout(() => {
       bottomDiv.className = "etym-visible";
