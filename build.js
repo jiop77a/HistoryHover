@@ -182,13 +182,9 @@ let duderino = () => {
       el.parentNode.removeChild(el);
     };
 
-    const makeSpan = (txt, attrs) => {
+    const makeSpan = (txt, idNum) => {
       let s = document.createElement("etym-span");
-      for (let prop in attrs) {
-        if (attrs.hasOwnProperty(prop)) {
-          s[prop] = attrs[prop];
-        }
-      }
+      s.id = idNum;
       s.appendChild(makeText(txt));
       s.addEventListener("mouseenter", mouseEnterWord);
       s.addEventListener("mouseleave", mouseLeaveWord);
@@ -201,11 +197,11 @@ let duderino = () => {
       let txt = n.nodeValue;
       let words = txt.split(" ");
 
-      insertBefore(makeSpan(words[0], {id: idNum++}), n);
+      insertBefore(makeSpan(words[0], idNum++), n);
 
       for (let j = 1; j < words.length; j++) {
         insertBefore(makeText(" "), n);
-        insertBefore(makeSpan(words[j], {id: idNum++}), n);
+        insertBefore(makeSpan(words[j], idNum++), n);
       }
       removeElement(n);
     }
