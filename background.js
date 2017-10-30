@@ -77,3 +77,16 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     return true;
   }
 });
+
+chrome.runtime.onInstalled.addListener(() => {
+  console.log('onInstall event');
+  chrome.tabs.query({}, (tabs) => {
+    console.log(tabs);
+    tabs.forEach((tab) => {
+      tabMap[tab.id] = tabMap[tab.id] = {active: true, url: tab.url};
+      if (!tab.active) {
+        chrome.tabs.reload(tab.id);
+      }
+    })
+  })
+});
