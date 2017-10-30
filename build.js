@@ -1,25 +1,13 @@
 let duderino = () => {
 
-  const fixLinks = (object) => {
-    let links = object.querySelectorAll(".crossreference");
-    for (let i = 0; i < links.length; i++) {
-      let word = links[i].innerHTML;
-      links[i].innerHTML = `
-        <a href="http://www.etymonline.com/word/${word}">${word}</a>
-        `;
-    }
-    return object
-  }
-
   const assembleResponse = (title, definition) => {
     let final = document.createElement('div');
     if (title.className === "tryAgain") {
       final.className = "tryAgain";
     }
-    let body = fixLinks(definition);
     title.className = "title";
     final.appendChild(title);
-    final.appendChild(body);
+    final.appendChild(definition);
     return final
   }
 
@@ -27,7 +15,7 @@ let duderino = () => {
     let credit = document.createElement('div');
     credit.className = "credit";
     credit.innerHTML =
-    `Powered by: <a href="http://www.etymonline.com">etymonline</a>`
+    `Powered by: <span class="crossreference">etymonline</span>`
     list.appendChild(credit);
     return list
   }
@@ -65,7 +53,6 @@ let duderino = () => {
     }
   }
 
-
   const getEtym = async word => {
     const proxyurl = "https://yes-proxy.herokuapp.com/";
     let url = `http://www.etymonline.com/word/${word}`;
@@ -89,54 +76,60 @@ let duderino = () => {
     }, 500);
   };
 
-  const fixLinksOutside = () => {
-    let bottomDiv = document.getElementById("etym-bottomDiv");
-    let links = bottomDiv.shadowRoot.querySelectorAll("a");
+  const sendTabMessage = (word) => {
+    let url = (word === "etymonline" ?
+    'http://www.etymonline.com/' : `http://www.etymonline.com/word/${word}`)
+    chrome.runtime.sendMessage({
+      msg: "newTab",
+      url,
+    });
+  }
+  const fixLinks = (bottomDiv) => {
+    let links = bottomDiv.shadowRoot.querySelectorAll(".crossreference");
     for (let i = 0; i < links.length; i++) {
       links[i].addEventListener('click', (e) => {
-        e.preventDefault();
-        chrome.runtime.sendMessage({
-          msg: "newTab",
-          url: e.target.href
-        });
+        sendTabMessage(e.target.innerText);
       });
     }
   }
 
-  const populateBottom = result => {
-    let bottomDiv = document.getElementById("etym-bottomDiv");
+  const populateBottom = (result, bottomDiv) => {
     let popDup = bottomDiv.shadowRoot.querySelector("div");
     popDup.innerHTML = result.innerHTML;
-    fixLinksOutside();
+    fixLinks(bottomDiv);
   };
 
-  const addSpinner = () => {
-    let bottomDiv = document.getElementById("etym-bottomDiv");
+  const addSpinner = (bottomDiv) => {
     let popDup = bottomDiv.shadowRoot.querySelector("div");
     popDup.innerHTML = "<div class='loader'></div>";
   };
 
+  const removePunc = (text) => {
+    return text.replace(/^\W+/, "").replace(/\W+$/, "");
+  }
+
+  const handleResult = (el, result, bottomDiv) => {
+    if (result.className !== "tryAgain") {
+      el.appendChild(result);
+    }
+    result.className = "etym-popup";
+    populateBottom(result, bottomDiv);
+  }
+
   const mouseEnterWord = (e) => {
-    // console.log("open timer set");
     let bottomDiv = document.getElementById("etym-bottomDiv");
     setTimeout(() => {
       bottomDiv.className = "etym-visible";
       let el = e.target;
       if (el.lastChild.classList === undefined) {
-        addSpinner();
-        let preText = e.target.innerHTML;
-        let text = preText.replace(/^\W+/, "").replace(/\W+$/, "");
+        addSpinner(bottomDiv);
+        let text = removePunc(el.innerHTML);
         getEtym(text).then(result => {
-          if (result.className !== "tryAgain") {
-            el.appendChild(result);
-          }
-          result.className = "etym-popup";
-
-          populateBottom(result);
+          handleResult(el, result, bottomDiv);
         });
       } else {
         result = el.lastChild;
-        populateBottom(result);
+        populateBottom(result, bottomDiv);
       }
     }, 750);
   };
@@ -208,18 +201,11 @@ let duderino = () => {
       let txt = n.nodeValue;
       let words = txt.split(" ");
 
-      insertBefore(
-        makeSpan(words[0], {
-          id: idNum++}),
-        n
-      );
+      insertBefore(makeSpan(words[0], {id: idNum++}), n);
+
       for (let j = 1; j < words.length; j++) {
         insertBefore(makeText(" "), n);
-        insertBefore(
-          makeSpan(words[j], {
-            id: idNum++}),
-          n
-        );
+        insertBefore(makeSpan(words[j], {id: idNum++}), n);
       }
       removeElement(n);
     }
@@ -236,7 +222,6 @@ let duderino = () => {
 
     bottomDiv.addEventListener("mouseleave", (e) => {
       bottomDiv.className = "etym-invisible";
-      // closeTimer();
     });
 
     let shadowRoot = bottomDiv.attachShadow({mode: 'open'});
@@ -264,10 +249,6 @@ const sendMessage = () => {
      }
   });
 }
-
-// sendMessage();
-
-// setTimeout(sendMessage, 1000);
 
 window.addEventListener('load', () => {
     setTimeout(sendMessage, 5000);

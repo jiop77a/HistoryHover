@@ -9,8 +9,9 @@ blockquote {
   border-left: 6px solid #e4dfca;
 }
 
-a {
-  color: #800020
+.crossreference {
+  color: #800020;
+  cursor: pointer;
 }
 
 .crossreference, .foreign {
@@ -20,6 +21,11 @@ a {
 .credit {
   text-align: center;
   font-size: 10px;
+}
+
+.credit span {
+  font-style: normal;
+  text-decoration: underline;
 }
 
 .popDup div:last-child {
