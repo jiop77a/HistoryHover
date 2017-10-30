@@ -156,6 +156,7 @@ let duderino = () => {
     closeTimer();
   };
 
+
   const makeSpans = () => {
     let treeWalker = document.createTreeWalker(
       document.body,
@@ -167,6 +168,7 @@ let duderino = () => {
               && (node.parentNode.nodeName !== 'SCRIPT')
               && (node.parentNode.nodeName !== 'STYLE')
               && (node.parentNode.nodeName !== 'ETYM-SPAN')
+              && (node.parentNode.className !== 'visually-hidden')
               && (getComputedStyle(node.parentNode).display !== 'flex')
             ) {
             return NodeFilter.FILTER_ACCEPT;
