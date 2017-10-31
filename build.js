@@ -11,8 +11,8 @@ let duderino = () => {
 
   const assembleResponse = (title, definition) => {
     let final = document.createElement('div');
-    if (title.className === "tryAgain") {
-      final.className = "tryAgain";
+    if (title.className === "tryAgain" || title.className === "fail") {
+      final.className = title.className;
     }
     title.className = "title";
     final.appendChild(title);
@@ -37,6 +37,7 @@ let duderino = () => {
       title.innerHTML = "Woah! (interj.)";
       definition.innerHTML = "Network busy. Try again soon!";
     } else {
+      title.className = "fail";
       title.innerHTML = "Sorry! (interj.)";
       definition.innerHTML = "The word you're looking for cannot be found :(";
     }
@@ -130,11 +131,42 @@ let duderino = () => {
     populateBottom(result, bottomDiv);
   };
 
+  const checkSuccess = (result) => {
+    if (result.className === "fail" || result.className == "tryAgain") {
+      return false;
+    }
+    return true;
+  }
+
+  const SRace = async (word) => {
+    let bareForm = word.slice(0, -1);
+    let withS = await getEtym(word);
+    if (checkSuccess(withS)) {
+      return withS;
+    } else {
+      let withoutS = await getEtym(bareForm);
+      if (checkSuccess(withoutS)) {
+        return withoutS;
+      }
+    }
+    return withS;
+  }
+
+  const checkforS = async (word) => {
+    if (/s$/.test(word)) {
+      let result = await SRace(word);
+      return result;
+    } else {
+      let result = await getEtym(word);
+      return result;
+      }
+  }
+
   const fetchNewWord = (bottomDiv, el) => {
     addSpinner(bottomDiv);
     let text = removePunc(el.innerHTML);
-    getEtym(text).then(result => {
-      handleResult(el, result, bottomDiv);
+    checkforS(text).then(result => {
+        handleResult(el, result, bottomDiv);
     });
   };
 
