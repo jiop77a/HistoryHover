@@ -10,7 +10,7 @@
   },
 
   "browser_action": {
-    "default_icon": "icon16.png"
+    "default_icon": "newicon16.png"
   },
 
   "background": {

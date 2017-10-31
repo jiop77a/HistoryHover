@@ -20,10 +20,9 @@ const getTabInfo = async () => {
 const startTimer = (tabId, url) => {
   setTimeout(() => {
     tabMap[tabId].url = url;
-    chrome.tabs.sendMessage(tabId, {msg: "runDude2"});
-  }, 1000)
-  chrome.tabs.sendMessage(tabId, {msg: "starting timer for 1 sec after load"})
-}
+    chrome.tabs.sendMessage(tabId, {msg: "2.8 secs later, running again"});
+  }, 2800);
+};
 
 chrome.browserAction.onClicked.addListener(() => {
   getTabInfo().then(tab => {
@@ -46,7 +45,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       tabMap[id].active ? setIconActive(id) : setIconInactive(id);
       tabMap[id].url = url;
     } else {
-      tabMap[id] = {active: true, url};
+      tabMap[id] = {active: false, url};
     }
     sendResponse({status: tabMap[id].active})
     return true;
@@ -66,7 +65,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status !== undefined
     && changeInfo.status === "complete") {
       if (tabMap[tabId] === undefined) {
-        tabMap[tabId] = {active: true, url: tab.url};
+        tabMap[tabId] = {active: false, url: tab.url};
       }
       if (tabMap[tabId].active) {
         setIconActive(tabId);
@@ -81,7 +80,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 chrome.runtime.onInstalled.addListener(() => {
   chrome.tabs.query({}, (tabs) => {
     tabs.forEach((tab) => {
-      tabMap[tab.id] = tabMap[tab.id] = {active: true, url: tab.url};
+      tabMap[tab.id] = tabMap[tab.id] = {active: false, url: tab.url};
       if (!tab.active) {
         chrome.tabs.reload(tab.id);
       }

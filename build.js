@@ -244,15 +244,14 @@ let duderino = () => {
   if (document.querySelector("#etym-bottomDiv") === null) {
     makeBottomDiv();
   }
-
+  console.log("making spans");
   makeSpans();
 };
 
 const sendMessage = () => {
-  console.log("sending dude on load from build");
   chrome.runtime.sendMessage({msg: "getStatus"}, (response) => {
      if (response.status) {
-       console.log("got response active, running duderino");
+       console.log("chrome's load: running");
        duderino();
      }
   });
@@ -260,7 +259,7 @@ const sendMessage = () => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log(request.msg);
-  if (request.msg == "runDude" || request.msg == "runDude2") {
+  if (request.msg == "runDude" || request.msg == "2.8 secs later, running again") {
     duderino();
   }
 })
