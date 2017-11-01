@@ -14,12 +14,14 @@
   },
 
   "background": {
-    "scripts": ["chrome-promise.js", "background.js"]
+    "scripts": ["analytics.js", "chrome-promise.js", "background.js"]
   },
 
   "permissions": [
     "tabs"
   ],
+
+  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
 
 
   "content_scripts": [

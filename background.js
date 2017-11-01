@@ -34,6 +34,7 @@ chrome.browserAction.onClicked.addListener(() => {
       chrome.tabs.sendMessage(id, {msg: "runDude"});
       tabMap[id].active = !tabMap[id].active;
       setIconActive(id);
+      console.log(_gaq.push(['_trackEvent', url, "ranDude"]))
     }
   });
 });
@@ -62,7 +63,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 })
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  console.log(changeInfo);
+  // console.log(changeInfo);
   if (changeInfo.status !== undefined
     && changeInfo.status === "complete") {
       if (tabMap[tabId] === undefined) {

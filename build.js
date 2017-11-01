@@ -165,6 +165,7 @@ let duderino = () => {
   const fetchNewWord = (bottomDiv, el) => {
     addSpinner(bottomDiv);
     let text = removePunc(el.innerHTML);
+    _gaq.push(['_trackEvent', text]);
     checkforS(text).then(result => {
         handleResult(el, result, bottomDiv);
     });
@@ -283,14 +284,14 @@ let duderino = () => {
 const sendMessage = () => {
   chrome.runtime.sendMessage({msg: "getStatus"}, (response) => {
      if (response.status) {
-       console.log("chrome's load: running");
+      //  console.log("chrome's load: running");
        duderino();
      }
   });
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log(request.msg);
+  // console.log(request.msg);
   if (request.msg == "runDude" || request.msg == "2.8 secs later, running again") {
     duderino();
   }
