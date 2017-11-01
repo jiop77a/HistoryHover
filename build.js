@@ -277,7 +277,6 @@ let duderino = () => {
   if (document.querySelector("#etym-bottomDiv") === null) {
     makeBottomDiv();
   }
-  console.log("making spans");
   makeSpans();
 };
 
