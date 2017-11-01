@@ -34,7 +34,7 @@ chrome.browserAction.onClicked.addListener(() => {
       chrome.tabs.sendMessage(id, {msg: "runDude"});
       tabMap[id].active = !tabMap[id].active;
       setIconActive(id);
-      console.log(_gaq.push(['_trackEvent', url, "ranDude"]))
+      // console.log(_gaq.push(['_trackEvent', url, "ranDude"]))
     }
   });
 });
