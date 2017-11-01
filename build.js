@@ -139,11 +139,11 @@ let duderino = () => {
   }
 
   const SRace = async (word) => {
-    let bareForm = word.slice(0, -1);
     let withS = await getEtym(word);
     if (checkSuccess(withS)) {
       return withS;
     } else {
+      let bareForm = word.slice(0, -1);
       let withoutS = await getEtym(bareForm);
       if (checkSuccess(withoutS)) {
         return withoutS;

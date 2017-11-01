@@ -62,6 +62,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 })
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  console.log(changeInfo);
   if (changeInfo.status !== undefined
     && changeInfo.status === "complete") {
       if (tabMap[tabId] === undefined) {
@@ -80,10 +81,10 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 chrome.runtime.onInstalled.addListener(() => {
   chrome.tabs.query({}, (tabs) => {
     tabs.forEach((tab) => {
-      tabMap[tab.id] = tabMap[tab.id] = {active: false, url: tab.url};
-      if (!tab.active) {
-        chrome.tabs.reload(tab.id);
-      }
+      tabMap[tab.id] = {active: false, url: tab.url};
+      // if (!tab.active) {
+      //   chrome.tabs.reload(tab.id);
+      // }
     })
   })
 });
