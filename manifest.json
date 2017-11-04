@@ -14,7 +14,7 @@
   },
 
   "background": {
-    "scripts": ["analytics.js", "chrome-promise.js", "background.js"]
+    "scripts": ["chrome-promise.js", "background.js"]
   },
 
   "permissions": [
@@ -27,9 +27,8 @@
   "content_scripts": [
     {
       "matches": ["*://*/*"],
-      /*"run_at": "document_start",*/
-      "js": ["build.js"],
-      "css": ["styles.css"]
+      "css": ["styles.css"],
+      "js": ["build.js"]
     }
   ],
 
