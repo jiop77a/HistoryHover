@@ -45,13 +45,28 @@ let duderino = () => {
     return assembleResponse(title, definition);
   };
 
+  const stripDef = (object) => {
+    let inserts = object.querySelectorAll("ins");
+    inserts.forEach(node => {
+      node.parentNode.removeChild(node);
+    })
+
+    object.childNodes.forEach(node => {
+      if (node.nodeName === "P" && node.childElementCount === 0) {
+        object.removeChild(node);
+      }
+    })
+    return object;
+  }
+
   const makeList = (divs) => {
     let list = document.createElement('div');
     for (let i = 0; i < divs.length; i++) {
       let div = divs[i].firstChild;
       let title = div.firstChild;
       let definition = div.lastChild.lastChild;
-      list.appendChild(assembleResponse(title, definition));
+      let clearDef = stripDef(definition);
+      list.appendChild(assembleResponse(title, clearDef));
     }
     return list;
   };
