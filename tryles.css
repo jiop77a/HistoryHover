@@ -6,11 +6,11 @@ blockquote {
   -webkit-margin-end: 0px;
   -webkit-margin-start: 0px;
   padding-left: 8px;
-  border-left: 6px solid #e4dfca;
+  border-left: 6px solid rgba(128, 0, 0, .1);
 }
 
 .crossreference {
-  color: #800020;
+  color: #800000;
   cursor: pointer;
 }
 
@@ -37,7 +37,7 @@ blockquote {
 }
 
 .popDup {
-  background-color: #fffbec;
+  background-color: #fffbf0;
   border-radius: 4px;
   padding: 10px;
   line-height: normal;
@@ -53,7 +53,7 @@ blockquote {
   font-size: 24px;
   margin: 0 0 10px;
   font-weight: 700;
-  color: #800020;
+  color: #800000;
 }
 
 .loader {
