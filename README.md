@@ -1,5 +1,7 @@
 # History Hover
 
+[Download from the Chrome Web Store](https://chrome.google.com/webstore/detail/historyhover/lfiineamfgggoidakbekedefdobnclfp)
+
 I've always loved words.  And, since first learning that words even had roots and origins, I've reserved a particular affection for etymology.  I think more than anything else this has to do with the sense one gets of a living connection to history.  Back in High School in the early 2000s my drug of choice was the online American Heritage Dictionary (mostly for its fantastic compendia of [Indo-European](https://ahdictionary.com/word/indoeurop.html) and [Semitic](https://ahdictionary.com/word/semitic.html) roots), and I still remember learning that the word "Veda" (i.e. the sacred Hindu texts) shared a common root with the English "wit" (i.e. perception, knowledge).  
 
 Blew my mind right out my nose.  
