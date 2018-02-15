@@ -119,6 +119,7 @@ let duderino = () => {
     let links = bottomDiv.shadowRoot.querySelectorAll(".crossreference");
     for (let i = 0; i < links.length; i++) {
       links[i].addEventListener('click', (e) => {
+        e.preventDefault();
         sendTabMessage(e.target.innerText);
       });
     }
