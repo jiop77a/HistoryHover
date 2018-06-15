@@ -18,7 +18,7 @@ The first time the user clicks the extension icon in a given tab, History Hover 
 
 No further clicks are required (though they may be an option in future versions).  Hover to retrieve an etymology.  Hover away to dismiss it.
 
-![](https://res.cloudinary.com/dol1mm8bd/image/upload/v1509494345/etym_demo_gif_cwnx6t.gif)
+![](https://res.cloudinary.com/dol1mm8bd/image/upload/v1509494345/HistoryHover/etym_demo_gif_cwnx6t.gif)
 
 ### Automation
 

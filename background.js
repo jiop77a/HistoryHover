@@ -1,4 +1,4 @@
-/* globals chrome */
+/* globals chrome, ChromePromise */
 
 const chromep = new ChromePromise();
 
@@ -15,7 +15,7 @@ const setIconActive = (tabId) => {
 const getTabInfo = async () => {
   let tabs = await chromep.tabs.query({active: true, currentWindow: true});
   return tabs[0];
-}
+};
 
 const startTimer = (tabId, url) => {
   setTimeout(() => {
@@ -39,7 +39,7 @@ chrome.browserAction.onClicked.addListener(() => {
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.msg == "getStatus") {
+  if (request.msg === "getStatus") {
     let {id, url} = sender.tab;
     if (tabMap[id] !== undefined) {
       tabMap[id].active ? setIconActive(id) : setIconInactive(id);
@@ -47,9 +47,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     } else {
       tabMap[id] = {active: false, url};
     }
-    sendResponse({status: tabMap[id].active})
+    sendResponse({status: tabMap[id].active});
     return true;
-  } else if (request.msg == "newTab") {
+  } else if (request.msg === "newTab") {
     chrome.tabs.create({
       active: false,
       url: request.url
@@ -59,7 +59,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
   delete tabMap[tabId];
-})
+});
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   // console.log(changeInfo);
@@ -85,6 +85,6 @@ chrome.runtime.onInstalled.addListener(() => {
       // if (!tab.active) {
       //   chrome.tabs.reload(tab.id);
       // }
-    })
-  })
+    });
+  });
 });
