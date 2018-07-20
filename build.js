@@ -86,10 +86,8 @@ let duderino = () => {
   };
 
   const getEtym = async word => {
-    const proxyurl = "https://yes-proxy.herokuapp.com/";
-    let url = `http://www.etymonline.com/word/${word}`;
-    let headers = new Headers({'my_origin': true});
-    let response = await fetch(proxyurl + url, { headers });
+    let url = `https://www.etymonline.com/word/${word}`;
+    let response = await fetch(url);
     if (response.ok) {
       let text = await response.text();
       return successResponse(text);
@@ -310,7 +308,7 @@ const sendMessage = () => {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // console.log(request.msg);
   if (
-    request.msg === "runDude" 
+    request.msg === "runDude"
     || request.msg === "2.8 secs later, running again"
   ) { duderino(); }
 });
