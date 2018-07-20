@@ -1,3 +1,5 @@
+/* globals chrome */
+
 let timeouts = [];
 
 const clearTimeouts = () => {
@@ -24,7 +26,7 @@ let duderino = () => {
     let credit = document.createElement('div');
     credit.className = "credit";
     credit.innerHTML =
-    `Powered by: <span class="crossreference">etymonline</span>`
+    `Powered by: <span class="crossreference">etymonline</span>`;
     list.appendChild(credit);
     return list;
   };
@@ -49,15 +51,15 @@ let duderino = () => {
     let inserts = object.querySelectorAll("ins");
     inserts.forEach(node => {
       node.parentNode.removeChild(node);
-    })
+    });
 
     object.childNodes.forEach(node => {
       if (node.nodeName === "P" && node.childElementCount === 0) {
         object.removeChild(node);
       }
-    })
+    });
     return object;
-  }
+  };
 
   const makeList = (divs) => {
     let list = document.createElement('div');
@@ -108,7 +110,7 @@ let duderino = () => {
 
   const sendTabMessage = (word) => {
     let url = (word === "etymonline" ?
-    'http://www.etymonline.com/' : `http://www.etymonline.com/word/${word}`)
+    'http://www.etymonline.com/' : `http://www.etymonline.com/word/${word}`);
     chrome.runtime.sendMessage({
       msg: "newTab",
       url,
@@ -149,11 +151,11 @@ let duderino = () => {
   };
 
   const checkSuccess = (result) => {
-    if (result.className === "fail" || result.className == "tryAgain") {
+    if (result.className === "fail" || result.className === "tryAgain") {
       return false;
     }
     return true;
-  }
+  };
 
   const SRace = async (word) => {
     let withS = await getEtym(word);
@@ -167,7 +169,7 @@ let duderino = () => {
       }
     }
     return withS;
-  }
+  };
 
   const checkforS = async (word) => {
     if (/s$/.test(word)) {
@@ -177,7 +179,7 @@ let duderino = () => {
       let result = await getEtym(word);
       return result;
       }
-  }
+  };
 
   const fetchNewWord = (bottomDiv, el) => {
     addSpinner(bottomDiv);
@@ -193,9 +195,9 @@ let duderino = () => {
       bottomDiv.className = "etym-visible";
       let el = e.target;
       if (el.lastChild.classList === undefined) {
-        fetchNewWord(bottomDiv, el)
+        fetchNewWord(bottomDiv, el);
       } else {
-        result = el.lastChild;
+        let result = el.lastChild;
         populateBottom(result, bottomDiv);
       }
     }, 750));
@@ -231,7 +233,7 @@ let duderino = () => {
 
     while (treeWalker.nextNode()) {
       textNodes.push(treeWalker.currentNode);
-    };
+    }
 
     const makeText = txt => document.createTextNode(txt);
 
@@ -303,14 +305,15 @@ const sendMessage = () => {
        duderino();
      }
   });
-}
+};
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // console.log(request.msg);
-  if (request.msg == "runDude" || request.msg == "2.8 secs later, running again") {
-    duderino();
-  }
-})
+  if (
+    request.msg === "runDude" 
+    || request.msg === "2.8 secs later, running again"
+  ) { duderino(); }
+});
 
 sendMessage();
 // window.addEventListener('load', sendMessage);
